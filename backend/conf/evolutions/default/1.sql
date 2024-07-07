@@ -1,0 +1,10 @@
+-- !Ups
+CREATE TABLE "USERS"(
+  "ID" uuid PRIMARY KEY,
+  "EMAIL" varchar(255) UNIQUE NOT NULL,
+  "PASSWORD" varchar(255) NOT NULL,
+  "CREATED_AT" timestamp NOT NULL
+);
+
+-- !Downs
+DROP TABLE IF EXISTS "USERS";
