@@ -1,1 +1,2 @@
-user.error.register=Username already exists
+user.error.register=Email already exists
+user.error.login=Email and password are incorrect
