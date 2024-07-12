@@ -5,6 +5,7 @@ import javax.inject.{ Singleton, Inject }
 import play.api._
 import play.api.mvc._
 import play.api.libs.json._
+import play.api.i18n._
 
 import scala.concurrent.{ Future, ExecutionContext }
 
@@ -15,15 +16,15 @@ import models.service.UserService
 class UserController @Inject()(
   userService: UserService, 
   val controllerComponents: ControllerComponents)
-  (implicit ec: ExecutionContext) extends BaseController {
+  (implicit ec: ExecutionContext) extends BaseController with I18nSupport {
 
-    def create() = Action.async(parse.json) { request =>
+    def create() = Action.async(parse.json) { implicit request =>
       val json = request.body.validate[User]
       json.fold(
         error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
         user => {
           userService.createUser(user).value.map {
-            case Left(error) => Unauthorized(Json.obj("messsage" -> s"$error"))
+            case Left(error) => error.toResult
             case Right(success) => Created(Json.obj("messsage" -> s"$success"))
           }
         }
