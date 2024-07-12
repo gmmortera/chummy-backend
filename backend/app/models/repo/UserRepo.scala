@@ -11,7 +11,7 @@ import scala.util.{ Success, Failure, Try }
 
 import slick.jdbc.JdbcProfile
 
-import models.domain.User
+import models.domain.{ User, LoginData }
 
 @Singleton
 class UserRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)(implicit ec: ExecutionContext) extends
@@ -30,6 +30,12 @@ class UserRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
     object users extends TableQuery(new UserTable(_)) {
       def create(user: User): Future[Try[Int]] = {
         val action = (this += user).asTry
+        db.run(action)
+      }
+
+      def findByUsernameAndPassword(data: LoginData): Future[Option[User]] = {
+        val action = this.filter(u => u.email === data.email 
+          && u.password === data.password).result.headOption
         db.run(action)
       }
     }
