@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/windows,scala,playframework,bloop,metals
-# Edit at https://www.toptal.com/developers/gitignore?templates=windows,scala,playframework,bloop,metals
+# Created by https://www.toptal.com/developers/gitignore/api/bloop,metals,playframework,scala,windows,sbt,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=bloop,metals,playframework,scala,windows,sbt,visualstudiocode
 
 ### Bloop ###
 .bloop/
@@ -26,12 +26,46 @@ server.pid
 /dist/
 .cache
 
+### SBT ###
+# Simple Build Tool
+# http://www.scala-sbt.org/release/docs/Getting-Started/Directories.html#configuring-version-control
+
+dist/*
+target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+.history
+.lib/
+
+### SBT Patch ###
+.bsp/
+
 ### Scala ###
 *.class
 *.log
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.ionide
 
 ### Windows ###
 # Windows thumbnail cache files
@@ -59,4 +93,4 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-# End of https://www.toptal.com/developers/gitignore/api/windows,scala,playframework,bloop,metals
+# End of https://www.toptal.com/developers/gitignore/api/bloop,metals,playframework,scala,windows,sbt,visualstudiocode
