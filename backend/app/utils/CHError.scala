@@ -14,4 +14,5 @@ case class ServiceError(
 
 trait CHError {
   val USER_ERROR_REGISTER = new ServiceError(Status.FORBIDDEN, "user.error.register")
+  val USER_ERROR_LOGIN = new ServiceError(Status.UNAUTHORIZED, "user.error.login")
 }
