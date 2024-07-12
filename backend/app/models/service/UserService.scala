@@ -9,14 +9,15 @@ import cats.syntax.all._
 
 import models.domain.User
 import models.repo.UserRepo
+import utils.{ CHError, ServiceError }
 
 @Singleton
-class UserService @Inject()(userRepo: UserRepo)(implicit ec: ExecutionContext) {
+class UserService @Inject()(userRepo: UserRepo)(implicit ec: ExecutionContext) extends CHError {
   
-  def createUser(user: User): EitherT[Future, String, String] = EitherT {
+  def createUser(user: User): EitherT[Future, ServiceError, String] = EitherT {
     val query = userRepo.users.create(user)
     query.map { result => result.fold(
-        error => Left("User already exists"),
+        error => Left(USER_ERROR_REGISTER),
         success => Right("User added successfully")
       )
     }
