@@ -19,4 +19,18 @@ object User {
     (JsPath \ "password").read[String] and
     Reads.pure(Instant.now)
   )(User.apply _)
+
+  implicit val userWrites: Writes[User] = (
+    (JsPath \ "id").write[UUID] and
+    (JsPath \ "email").write[String]
+  )(u => (u.id, u.email))
+}
+
+case class LoginData(
+  email: String,
+  password: String
+)
+
+object LoginData {
+  implicit val loginReads: Reads[LoginData] = Json.reads[LoginData]
 }
