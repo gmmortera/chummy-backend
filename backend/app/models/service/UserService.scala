@@ -4,10 +4,10 @@ import javax.inject.{ Singleton, Inject }
 
 import scala.concurrent.{ Future, ExecutionContext }
 
-import cats.data.EitherT
+import cats.data.{ EitherT, OptionT }
 import cats.syntax.all._
 
-import models.domain.User
+import models.domain.{ User, LoginData }
 import models.repo.UserRepo
 import utils.{ CHError, ServiceError }
 
@@ -21,5 +21,9 @@ class UserService @Inject()(userRepo: UserRepo)(implicit ec: ExecutionContext) e
         success => Right("User added successfully")
       )
     }
+  }
+
+  def validateUser(user: LoginData): EitherT[Future, ServiceError, User] = {
+    OptionT(userRepo.users.findByUsernameAndPassword(user)).toRight(USER_ERROR_LOGIN)
   }
 }
