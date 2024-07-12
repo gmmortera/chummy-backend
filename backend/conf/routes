@@ -6,6 +6,8 @@
 # An example controller showing a sample home page
 GET     /                           controllers.HomeController.index()
 
+POST    /sessions                   controllers.AuthController.create()
+DELETE  /sessions                   controllers.AuthController.destroy()
 POST    /users                      controllers.UserController.create()
 
 # Map static resources from the /public folder to the /assets URL path
