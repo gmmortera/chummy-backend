@@ -18,7 +18,7 @@ class UserController @Inject()(
   val controllerComponents: ControllerComponents)
   (implicit ec: ExecutionContext) extends BaseController with I18nSupport {
 
-    def create() = Action.async(parse.json) { implicit request =>
+    def create = Action.async(parse.json) { implicit request =>
       val json = request.body.validate[User]
       json.fold(
         error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
