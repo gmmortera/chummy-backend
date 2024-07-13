@@ -10,14 +10,16 @@ import scala.concurrent.{ Future, ExecutionContext }
 
 import models.domain.LoginData
 import models.service.UserService
+import utils._
 
 @Singleton
 class AuthController @Inject()(
+  SecureAction: SecureAction,
   userService: UserService,
   val controllerComponents: ControllerComponents)
   (implicit ec: ExecutionContext) extends BaseController with I18nSupport {
   
-  def create() = Action.async(parse.json) { implicit request =>
+  def create = Action.async(parse.json) { implicit request =>
     val json = request.body.validate[LoginData]
     json.fold(
       error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
@@ -32,7 +34,7 @@ class AuthController @Inject()(
     )
   }
 
-  def destroy() = Action.async { request =>
+  def destroy = SecureAction.async(parse.json) { implicit request =>
     Future.successful(Ok.withNewSession)
   }
 }
