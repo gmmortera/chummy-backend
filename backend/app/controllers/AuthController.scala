@@ -10,7 +10,7 @@ import scala.concurrent.{ Future, ExecutionContext }
 
 import models.domain.LoginData
 import models.service.UserService
-import utils._
+import utils.{ CHErrorHandler, SecureAction }
 
 @Singleton
 class AuthController @Inject()(
@@ -24,12 +24,9 @@ class AuthController @Inject()(
     json.fold(
       error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
       data => {
-        userService.validateUser(data).value.map {
-          case Left(error) => error.toResult
-          case Right(success) => Ok(
-            Json.obj("user" -> Json.toJson(success)))
-            .withSession("authenticated" -> success.id.toString)
-        }
+        userService.validateUser(data).fold(
+          CHErrorHandler(_), 
+          success => Ok(Json.obj("user" -> Json.toJson(success))).withSession("authenticated" -> success.id.toString))
       }
     )
   }
