@@ -2,13 +2,14 @@ package utils
 
 import play.api.mvc._
 import play.api.mvc.Results._
+import play.api.http.Status
 
 import java.util.UUID
 import javax.inject._
 
 import scala.concurrent.{ ExecutionContext, Future }
 
-import utils.CHError
+import utils.{ CHError, CHErrorHandler }
 import scala.util.Try
 
 class SecureAction @Inject()(
@@ -22,7 +23,7 @@ class SecureAction @Inject()(
     request.session.get("authenticated").flatMap { implicit id =>
       Try(UUID.fromString(id)).toOption
     }.fold(
-      Future.successful(Unauthorized("Unauthorized access"))
+      Future.successful(CHErrorHandler(CHError(Status.UNAUTHORIZED, "auth.error")))
     )(id => block(UserSessionRequest(id, request)))
   }
 }
