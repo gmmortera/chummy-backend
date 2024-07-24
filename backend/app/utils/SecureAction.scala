@@ -14,7 +14,7 @@ import scala.util.Try
 class SecureAction @Inject()(
   val parser: BodyParsers.Default,
   implicit val executionContext: ExecutionContext
-) extends ActionBuilder[UserSessionRequest, AnyContent] with CHError {
+) extends ActionBuilder[UserSessionRequest, AnyContent] {
   override def invokeBlock[A](
     request: Request[A], 
     block: UserSessionRequest[A] => Future[Result]

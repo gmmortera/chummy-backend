@@ -11,6 +11,7 @@ import scala.concurrent.{ Future, ExecutionContext }
 
 import models.domain.User
 import models.service.UserService
+import utils.CHErrorHandler
 
 @Singleton
 class UserController @Inject()(
@@ -23,10 +24,8 @@ class UserController @Inject()(
       json.fold(
         error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
         user => {
-          userService.createUser(user).value.map {
-            case Left(error) => error.toResult
-            case Right(success) => Created(Json.obj("messsage" -> s"$success"))
-          }
+          userService.createUser(user)
+            .fold(CHErrorHandler(_), success => Created(Json.obj("messsage" -> s"$success")))
         }
       )
     }
