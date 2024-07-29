@@ -6,6 +6,9 @@
 
 ### Metals ###
 .metals/
+metals.log
+metals.mv.db
+settings.json
 project/**/metals.sbt
 
 ### PlayFramework ###
