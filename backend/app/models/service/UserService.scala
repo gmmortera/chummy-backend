@@ -12,11 +12,12 @@ import cats.syntax.all._
 import models.domain.{ User, LoginData }
 import models.repo.UserRepo
 import utils.CHError
+import utils.result.CHResult
 
 @Singleton
 class UserService @Inject()(userRepo: UserRepo)(implicit ec: ExecutionContext) {
   
-  def createUser(user: User): EitherT[Future, CHError, String] = EitherT {
+  def createUser(user: User): CHResult[String] = EitherT {
     val query = userRepo.users.create(user)
     query.map { result => result.fold(
         error => Left(CHError(Status.FORBIDDEN, "user.error.register")),
