@@ -96,4 +96,9 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+.g8/form
+.vscode
+.g8/form/
+.vscode/
+
 # End of https://www.toptal.com/developers/gitignore/api/bloop,metals,playframework,scala,windows,sbt,visualstudiocode
