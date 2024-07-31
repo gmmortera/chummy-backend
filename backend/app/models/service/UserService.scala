@@ -19,11 +19,10 @@ class UserService @Inject()(userRepo: UserRepo)(implicit ec: ExecutionContext) {
   
   def createUser(user: User): CHResult[String] = EitherT {
     val query = userRepo.users.create(user)
-    query.map { result => result.fold(
-        error => Left(CHError(Status.FORBIDDEN, "user.error.register")),
-        success => Right("User added successfully")
-      )
-    }
+    query.map { _.fold(
+      _ => Left(CHError(Status.FORBIDDEN, "user.error.register")),
+      _ => Right("User added successfully")
+    )}
   }
 
   def validateUser(user: LoginData): EitherT[Future, CHError, User] = {
