@@ -29,7 +29,7 @@ class PostRepo @Inject()(
       def content = column[String]("CONTENT")
       def createdAt = column[Instant]("CREATED_AT")
 
-      def user = foreignKey("USER_POST", idUser, userRepo.users.table)(_.id, onDelete=ForeignKeyAction.Cascade)
+      def userPost = foreignKey("USER_POST", idUser, userRepo.users.table)(_.id, onDelete=ForeignKeyAction.Cascade)
 
       def * = (id, idUser, image, content, createdAt).mapTo[Post]
     }
