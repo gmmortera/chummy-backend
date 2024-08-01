@@ -1,0 +1,11 @@
+-- !Ups
+CREATE TABLE "COMMENTS"(
+  "ID" uuid PRIMARY KEY,
+  "ID_USER" uuid REFERENCES "USERS",
+  "ID_POST" uuid REFERENCES "POSTS",
+  "TEXT" text NOT NULL,
+  "CREATED_AT" timestamp NOT NULL
+);
+
+-- !Downs
+DROP TABLE IF EXISTS "COMMENTS";
