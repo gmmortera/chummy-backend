@@ -36,7 +36,6 @@ class ProfileRepo @Inject()(
     def get: Future[Seq[Profile]] = db.run(this.result)
     def create(profile: Profile): Future[Try[Int]] = db.run((this += profile).asTry)
     def edit(profile: Profile): Future[Try[Int]] = {
-      val Profile(idUser, username, image, birthday) = profile
       val action = this
         .filter(_.idUser === profile.idUser)
         .map(p => (p.idUser, p.username, p.image, p.birthday).mapTo[Profile])
