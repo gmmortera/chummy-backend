@@ -19,5 +19,10 @@ GET     /profiles                   controllers.ProfileController.index()
 POST    /profiles                   controllers.ProfileController.create()
 PUT     /profiles                   controllers.ProfileController.edit()
 
+GET     /comments                   controllers.CommentController.index()
+POST    /comments                   controllers.CommentController.create()
+PUT     /comments/:id               controllers.CommentController.edit(id: java.util.UUID)
+DELETE  /comments/:id               controllers.CommentController.destroy(id: java.util.UUID)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
