@@ -6,6 +6,7 @@
 
 ### Metals ###
 .metals/
+.metals
 metals.log
 metals.mv.db
 settings.json
