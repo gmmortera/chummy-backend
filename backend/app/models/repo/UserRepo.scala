@@ -29,7 +29,7 @@ class UserRepo @Inject()(protected val dbConfigProvider: DatabaseConfigProvider)
 
     object users extends TableQuery(new UserTable(_)) {
       def table: TableQuery[UserTable] = this
-
+      def get: Future[Seq[User]] = db.run(this.result)
       def create(user: User): Future[Try[Int]] = {
         val action = (this += user).asTry
         db.run(action)
