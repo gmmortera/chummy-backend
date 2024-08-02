@@ -1,0 +1,11 @@
+-- !Ups
+CREATE TABLE "LIKES"(
+  "ID_USER" uuid REFERENCES "USERS",
+  "ID_POST" uuid REFERENCES "POSTS",
+  "IS_LIKED" boolean NOT NULL,
+  "CREATED_AT" timestamp NOT NULL,
+  PRIMARY KEY ("ID_USER", "ID_POST")
+);
+
+-- !Downs
+DROP TABLE IF EXISTS "LIKES";
