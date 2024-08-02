@@ -16,7 +16,7 @@ import utils.result.CHResult
 
 @Singleton
 class UserService @Inject()(userRepo: UserRepo)(implicit ec: ExecutionContext) {
-  
+  def getUsers: Future[Seq[User]] = userRepo.users.get
   def createUser(user: User): CHResult[String] = EitherT {
     val query = userRepo.users.create(user)
     query.map { _.fold(
