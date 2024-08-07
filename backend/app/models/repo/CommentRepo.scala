@@ -28,11 +28,12 @@ class CommentRepo @Inject()(
     def idPost = column[UUID]("ID_POST")
     def text = column[String]("TEXT")
     def createdAt = column[Instant]("CREATED_AT")
+    def updatedAt = column[Option[Instant]]("UPDATED_AT")
 
     def commentUser = foreignKey("COMMENT_USER", idUser, userRepo.users.table)(_.id, onDelete=ForeignKeyAction.Cascade)
     def commentPost = foreignKey("COMMENT_POST", idPost, postRepo.posts.table)(_.id, onDelete=ForeignKeyAction.Cascade)
 
-    def * = (id, idUser, idPost, text, createdAt).mapTo[Comment]
+    def * = (id, idUser, idPost, text, createdAt, updatedAt).mapTo[Comment]
   }
 
   object comments extends TableQuery(new CommentTable(_)) {
@@ -44,8 +45,8 @@ class CommentRepo @Inject()(
     def edit(comment: Comment): Future[Try[Int]] = {
       val action = this
         .filter(_.id === comment.id)
-        .map(c => (c.id, c.idUser, c.idPost, c.text, c.createdAt).mapTo[Comment])
-        .update(comment).asTry
+        .map(c => (c.id, c.idUser, c.idPost, c.text, c.updatedAt))
+        .update((comment.id, comment.idUser, comment.idPost, comment.text, comment.updatedAt)).asTry
       db.run(action)
     }
     def destroy(id: UUID): Future[Try[Int]] = {
