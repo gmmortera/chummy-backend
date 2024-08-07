@@ -27,12 +27,13 @@ class LikeRepo @Inject()(
     def idPost = column[UUID]("ID_POST")
     def isLiked = column[Boolean]("IS_LIKED")
     def createdAt = column[Instant]("CREATED_AT")
+    def updatedAt = column[Option[Instant]]("UPDATED_AT")
 
     def pkLike = primaryKey("PK_LIKE", (idUser, idPost))
     def likeUser = foreignKey("LIKE_USER", idUser, userRepo.users.table)(_.id, onDelete=ForeignKeyAction.Cascade)
     def likePost = foreignKey("LIKE_POST", idPost, postRepo.posts.table)(_.id, onDelete=ForeignKeyAction.Cascade)
 
-    def * = (idUser, idPost, isLiked, createdAt).mapTo[Like]
+    def * = (idUser, idPost, isLiked, createdAt, updatedAt).mapTo[Like]
   }
 
   object likes extends TableQuery(new LikeTable(_)) {
@@ -44,7 +45,8 @@ class LikeRepo @Inject()(
     def edit(like: Like): Future[Try[Int]] = {
       val action = this
         .filter(l => (l.idUser === like.idUser && l.idPost === like.idPost))
-        .update(like).asTry
+        .map(l => (l.idUser, l.idPost, l.isLiked, l.updatedAt))
+        .update((like.idUser, like.idPost, like.isLiked, like.updatedAt)).asTry
       db.run(action)
     }
   }
