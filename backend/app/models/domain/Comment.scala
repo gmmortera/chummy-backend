@@ -12,14 +12,16 @@ case class Comment(
   idUser: UUID,
   idPost: UUID,
   text: String,
-  createdAt: Instant
+  createdAt: Instant,
+  updatedAt: Option[Instant]
 ) {
   def withId(id: UUID): Comment = new Comment(
     id,
     idUser,
     idPost,
     text,
-    createdAt
+    createdAt,
+    Some(Instant.now)
   )
 }
 
@@ -29,7 +31,8 @@ object Comment {
     (JsPath \ "idUser").read[UUID] and
     (JsPath \ "idPost").read[UUID] and
     (JsPath \ "text").read[String] and
-    Reads.pure(Instant.now)
+    Reads.pure(Instant.now) and
+    (JsPath \ "updatedAt").readNullable[Instant]
   )(Comment.apply _)
   implicit val commentWrites: Writes[Comment] = Json.writes[Comment]
 }
