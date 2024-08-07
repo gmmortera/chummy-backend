@@ -29,5 +29,10 @@ GET     /likes                      controllers.LikeController.index()
 POST    /likes                      controllers.LikeController.create()
 PUT     /likes                      controllers.LikeController.edit()
 
+GET     /replies                    controllers.ReplyController.index()
+POST    /replies                    controllers.ReplyController.create()
+PUT     /replies/:id                controllers.ReplyController.edit(id: java.util.UUID)
+DELETE  /replies/:id                controllers.ReplyController.destroy(id: java.util.UUID)   
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
