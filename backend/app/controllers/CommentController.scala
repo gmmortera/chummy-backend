@@ -34,13 +34,8 @@ class CommentController @Inject()(
   }
 
   def edit(id: UUID) = SecureAction.async(parse.json) { request =>
-    val json = request.body.validate[Comment]
-    json.fold(
-      error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
-      comment => {
-        commentService.editComment(comment.withId(id)).fold(CHErrorHandler(_), success => Ok(Json.obj("success" -> s"$success")))
-      }
-    )
+    val text = request.body.as[String]
+    commentService.editComment(id, text).fold(CHErrorHandler(_), success => Ok(Json.obj("success" -> s"$success")))
   }
 
   def destroy(id: UUID) = SecureAction.async {
