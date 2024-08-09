@@ -7,7 +7,7 @@ import play.api.libs.json._
 
 import scala.concurrent.{ Future, ExecutionContext }
 
-import models.domain.Like
+import models.domain.{ Like, LikeStatus }
 import models.service.LikeService
 import utils.{ CHErrorHandler, SecureAction }
 
@@ -33,11 +33,11 @@ class LikeController @Inject()(
   }
 
   def edit = SecureAction.async(parse.json) { implicit request =>
-    val json = request.body.validate[Like]
+    val json = request.body.validate[LikeStatus]
     json.fold(
       error => Future.successful(BadRequest(Json.obj("errors" -> JsError.toJson(error)))),
-      like => {
-        likeService.editLike(like).fold(CHErrorHandler(_), success => Ok(Json.obj("success" -> s"$success")))
+      status => {
+        likeService.editLike(request.idSession, status).fold(CHErrorHandler(_), success => Ok(Json.obj("success" -> s"$success")))
       }
     )
   }
