@@ -52,11 +52,11 @@ class NotificationRepo @Inject()(
       val action = (this += notification).asTry
       db.run(action)
     }
-    def edit(notification: Notification): Future[Try[Int]] = {
+    def edit(id: UUID): Future[Try[Int]] = {
       val action = this
-        .filter(_.id === notification.id)
+        .filter(_.id === id)
         .map(_.seenAt)
-        .update(notification.seenAt).asTry
+        .update(Some(Instant.now)).asTry
       db.run(action)
     }
   }
