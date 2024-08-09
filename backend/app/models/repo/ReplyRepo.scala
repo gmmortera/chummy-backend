@@ -42,11 +42,11 @@ class ReplyRepo @Inject()(
       val action = (this += reply).asTry
       db.run(action)
     }
-    def edit(reply: Reply): Future[Try[Int]] = {
+    def edit(id: UUID, text: String): Future[Try[Int]] = {
       val action = this
-        .filter(_.id === reply.id)
-        .map(r => (r.id, r.idUser, r.idComment, r.text, r.updatedAt))
-        .update((reply.id, reply.idUser, reply.idComment, reply.text, reply.updatedAt)).asTry
+        .filter(_.id === id)
+        .map(r => (r.text, r.updatedAt))
+        .update((text, Some(Instant.now))).asTry
       db.run(action)
     }
     def destroy(id: UUID): Future[Try[Int]] = {
