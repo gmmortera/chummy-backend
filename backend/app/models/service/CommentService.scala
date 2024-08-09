@@ -26,8 +26,8 @@ class CommentService @Inject()(commentRepo: CommentRepo)(implicit ec: ExecutionC
       _ => Right("Comment added successfully")
     )}
   }
-  def editComment(comment: Comment): CHResult[String] = EitherT {
-    val query = commentRepo.comments.edit(comment)
+  def editComment(id: UUID, text: String): CHResult[String] = EitherT {
+    val query = commentRepo.comments.edit(id, text)
     query.map { _.fold(
       _ => Left(CHError(Status.BAD_REQUEST, "comment.error.edit")),
       _ => Right("Comment edited successfully")
