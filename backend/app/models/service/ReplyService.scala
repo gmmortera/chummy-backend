@@ -26,8 +26,8 @@ class ReplyService @Inject()(replyRepo: ReplyRepo)(implicit ec: ExecutionContext
       _ => Right("Reply added successfully")
     )}
   }
-  def editReply(reply: Reply): CHResult[String] = EitherT {
-    val query = replyRepo.replies.edit(reply)
+  def editReply(id: UUID, text: String): CHResult[String] = EitherT {
+    val query = replyRepo.replies.edit(id, text)
     query.map { _.fold(
       _ => Left(CHError(Status.BAD_REQUEST, "reply.error.edit")),
       _ => Right("Reply edited successfully")
