@@ -1,6 +1,8 @@
 package models.service
 
 import javax.inject.{ Singleton, Inject }
+import java.util.UUID
+import java.time.Instant
 
 import play.api.http.Status
 
@@ -24,8 +26,8 @@ class NotificationService @Inject()(notifRepo: NotificationRepo)(implicit ec: Ex
       _ => Right("Notification added successfully")
     )}
   }
-  def editNotification(notification: Notification): CHResult[String] = EitherT {
-    val query = notifRepo.notifications.edit(notification)
+  def editNotification(id: UUID): CHResult[String] = EitherT {
+    val query = notifRepo.notifications.edit(id)
     query.map { _.fold(
       _ => Left(CHError(Status.BAD_REQUEST, "notif.error.edit")),
       _ => Right("Notification edited successfully")
