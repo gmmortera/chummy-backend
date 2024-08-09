@@ -1,6 +1,7 @@
 package controllers
 
 import javax.inject._
+import java.util.UUID
 import play.api._
 import play.api.mvc._
 import play.api.libs.json._
@@ -32,13 +33,7 @@ class NotificationController @Inject()(
     )
   }
 
-  def edit = SecureAction.async(parse.json) { request =>
-    val json = request.body.validate[Notification]
-    json.fold(
-      error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
-      notification => {
-        notifService.editNotification(notification).fold(CHErrorHandler(_), success => Created(Json.obj("success" -> s"$success")))
-      }
-    )
+  def edit(id: UUID) = SecureAction.async {
+    notifService.editNotification(id).fold(CHErrorHandler(_), success => Created(Json.obj("success" -> s"$success")))
   }
 }
