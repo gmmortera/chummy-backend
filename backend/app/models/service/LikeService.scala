@@ -1,6 +1,7 @@
 package models.service
 
 import javax.inject.{ Singleton, Inject }
+import java.util.UUID
 
 import play.api.http.Status
 
@@ -9,7 +10,7 @@ import scala.concurrent.{ Future, ExecutionContext }
 import cats.data.EitherT
 import cats.syntax.all._
 
-import models.domain.Like
+import models.domain.{ Like, LikeStatus }
 import models.repo.LikeRepo
 import utils.result.CHResult
 import utils.CHError
@@ -24,8 +25,8 @@ class LikeService @Inject()(likeRepo: LikeRepo)(implicit ec: ExecutionContext) {
       _ => Right("Like added successfully")
     )}
   }
-  def editLike(like: Like): CHResult[String] = EitherT {
-    val query = likeRepo.likes.edit(like)
+  def editLike(idUser: UUID, status: LikeStatus): CHResult[String] = EitherT {
+    val query = likeRepo.likes.edit(idUser, status)
     query.map { _.fold(
       _ => Left(CHError(Status.BAD_REQUEST, "like.error.edit")),
       _ => Right("Like edited successfully")
