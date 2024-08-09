@@ -14,16 +14,7 @@ case class Comment(
   text: String,
   createdAt: Instant,
   updatedAt: Option[Instant]
-) {
-  def withId(id: UUID): Comment = new Comment(
-    id,
-    idUser,
-    idPost,
-    text,
-    createdAt,
-    Some(Instant.now)
-  )
-}
+)
 
 object Comment {
   implicit val commentReads: Reads[Comment] = (
