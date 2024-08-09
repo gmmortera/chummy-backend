@@ -34,13 +34,8 @@ class ReplyController @Inject()(
   }
 
   def edit(id: UUID) = SecureAction.async(parse.json) { request =>
-    val json = request.body.validate[Reply]
-    json.fold(
-      error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
-      reply => {
-        replyService.editReply(reply.withId(id)).fold(CHErrorHandler(_), success => Ok(Json.obj("success" -> s"$success")))
-      }
-    )
+    val text = request.body.as[String]
+    replyService.editReply(id, text).fold(CHErrorHandler(_), success => Ok(Json.obj("success" -> s"$success")))
   }
 
   def destroy(id: UUID) = SecureAction.async {
