@@ -25,3 +25,12 @@ object Like {
 
   implicit val likeWrites: Writes[Like] = Json.writes[Like]
 }
+
+case class LikeStatus(
+  idPost: UUID,
+  isLiked: Boolean
+)
+
+object LikeStatus {
+  implicit val statusReads: Reads[LikeStatus] = Json.reads[LikeStatus]
+}
