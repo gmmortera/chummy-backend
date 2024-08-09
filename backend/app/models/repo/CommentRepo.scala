@@ -43,11 +43,11 @@ class CommentRepo @Inject()(
       val action = (this += comment).asTry
       db.run(action)
     }
-    def edit(comment: Comment): Future[Try[Int]] = {
+    def edit(id: UUID, text: String): Future[Try[Int]] = {
       val action = this
-        .filter(_.id === comment.id)
-        .map(c => (c.id, c.idUser, c.idPost, c.text, c.updatedAt))
-        .update((comment.id, comment.idUser, comment.idPost, comment.text, comment.updatedAt)).asTry
+        .filter(_.id === id)
+        .map(c => (c.text, c.updatedAt))
+        .update((text, Some(Instant.now))).asTry
       db.run(action)
     }
     def destroy(id: UUID): Future[Try[Int]] = {
