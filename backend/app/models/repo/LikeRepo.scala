@@ -11,7 +11,7 @@ import scala.util.Try
 
 import slick.jdbc.JdbcProfile
 
-import models.domain.Like
+import models.domain.{ Like, LikeStatus }
 import models.repo.{ UserRepo, PostRepo }
 
 @Singleton
@@ -42,11 +42,11 @@ class LikeRepo @Inject()(
       val action = (this += like).asTry
       db.run(action)
     }
-    def edit(like: Like): Future[Try[Int]] = {
+    def edit(idUser: UUID, status: LikeStatus): Future[Try[Int]] = {
       val action = this
-        .filter(l => (l.idUser === like.idUser && l.idPost === like.idPost))
-        .map(l => (l.idUser, l.idPost, l.isLiked, l.updatedAt))
-        .update((like.idUser, like.idPost, like.isLiked, like.updatedAt)).asTry
+        .filter(l => (l.idUser === idUser && l.idPost === status.idPost))
+        .map(l => (l.isLiked, l.updatedAt))
+        .update((status.isLiked, Some(Instant.now))).asTry
       db.run(action)
     }
   }
