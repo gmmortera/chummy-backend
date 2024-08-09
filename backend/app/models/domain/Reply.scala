@@ -14,16 +14,7 @@ case class Reply(
   text: String,
   createdAt: Instant,
   updatedAt: Option[Instant]
-) {
-  def withId(id: UUID): Reply = new Reply(
-    id,
-    idUser,
-    idComment,
-    text,
-    createdAt,
-    Some(Instant.now)
-  )
-}
+)
 
 object Reply {
   implicit val replyReads: Reads[Reply] = (
