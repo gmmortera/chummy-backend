@@ -32,7 +32,11 @@ PUT     /likes                      controllers.LikeController.edit()
 GET     /replies                    controllers.ReplyController.index()
 POST    /replies                    controllers.ReplyController.create()
 PUT     /replies/:id                controllers.ReplyController.edit(id: java.util.UUID)
-DELETE  /replies/:id                controllers.ReplyController.destroy(id: java.util.UUID)   
+DELETE  /replies/:id                controllers.ReplyController.destroy(id: java.util.UUID) 
+
+GET     /notifications              controllers.NotificationController.index()
+POST    /notifications              controllers.NotificationController.create()
+PUT     /notifications              controllers.NotificationController.edit()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
