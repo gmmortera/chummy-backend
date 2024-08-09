@@ -13,7 +13,16 @@ case class Notification(
   action: ActionType.ActionType,
   createdAt: Instant,
   seenAt: Option[Instant]
-)
+) {
+  def withId(id: UUID): Notification = new Notification(
+    id,
+    idUser,
+    idPost,
+    action,
+    createdAt,
+    Some(Instant.now)
+  )
+}
 
 object Notification {
   implicit val notifReads: Reads[Notification] = (
