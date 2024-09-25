@@ -4,38 +4,39 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index()
+GET     /                           controllers.HomeController.index
 
-POST    /sessions                   controllers.AuthController.create()
-DELETE  /sessions                   controllers.AuthController.destroy()
+GET     /sessions                   controllers.AuthController.index
+POST    /sessions                   controllers.AuthController.create
+DELETE  /sessions                   controllers.AuthController.destroy
 
-GET     /users                      controllers.UserController.index()
-POST    /users                      controllers.UserController.create()
+GET     /users                      controllers.UserController.index
+POST    /users                      controllers.UserController.create
 
-GET     /posts                      controllers.PostController.index()
-POST    /posts                      controllers.PostController.create()
+GET     /posts                      controllers.PostController.index
+POST    /posts                      controllers.PostController.create
 DELETE  /posts/:id                  controllers.PostController.destroy(id: java.util.UUID)
 
-GET     /profiles                   controllers.ProfileController.index()
-POST    /profiles                   controllers.ProfileController.create()
-PUT     /profiles                   controllers.ProfileController.edit()
+GET     /profiles                   controllers.ProfileController.index
+POST    /profiles                   controllers.ProfileController.create
+PUT     /profiles                   controllers.ProfileController.edit
 
-GET     /comments                   controllers.CommentController.index()
-POST    /comments                   controllers.CommentController.create()
+GET     /comments                   controllers.CommentController.index
+POST    /comments                   controllers.CommentController.create
 PUT     /comments/:id               controllers.CommentController.edit(id: java.util.UUID)
 DELETE  /comments/:id               controllers.CommentController.destroy(id: java.util.UUID)
 
-GET     /likes                      controllers.LikeController.index()
-POST    /likes                      controllers.LikeController.create()
-PUT     /likes                      controllers.LikeController.edit()
+GET     /likes                      controllers.LikeController.index
+POST    /likes                      controllers.LikeController.create
+PUT     /likes                      controllers.LikeController.edit
 
-GET     /replies                    controllers.ReplyController.index()
-POST    /replies                    controllers.ReplyController.create()
+GET     /replies                    controllers.ReplyController.index
+POST    /replies                    controllers.ReplyController.create
 PUT     /replies/:id                controllers.ReplyController.edit(id: java.util.UUID)
 DELETE  /replies/:id                controllers.ReplyController.destroy(id: java.util.UUID) 
 
-GET     /notifications              controllers.NotificationController.index()
-POST    /notifications              controllers.NotificationController.create()
+GET     /notifications              controllers.NotificationController.index
+POST    /notifications              controllers.NotificationController.create
 PUT     /notifications/:id          controllers.NotificationController.edit(id: java.util.UUID)
 
 # Map static resources from the /public folder to the /assets URL path
