@@ -31,7 +31,6 @@ class AuthController @Inject()(
 
   def index: WebSocket = WebSocket.accept[WebsocketMessage, WebsocketMessage] { implicit request =>
     ActorFlow.actorRef { out => 
-      println("Websocket Entered")
       UserActor.props(out, manager)
     }
   }
