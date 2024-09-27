@@ -1,33 +1,35 @@
 package actors
 
+import java.util.UUID
+
 import play.api.libs.json._
 
 import org.apache.pekko.actor.{ Actor, ActorRef, Props }
 
-import models.domain.{ WebsocketMessage, UserAction }
+import models.domain._
 
-class UserActor(out: ActorRef, manager: ActorRef) extends Actor {
+class UserActor(id: UUID, out: ActorRef, manager: ActorRef) extends Actor {
   import UserActor._
-  manager ! GeneralManager.NewUser(self)
+
+  val user = ActorData(id, self)
+  manager ! GeneralManager.NewUser(user)
 
   def receive: Receive = {
-    case msg: WebsocketMessage => handleMessage(msg)
-    case SendUpdate(res) => 
-      println(s"User: $self")
-      out ! res
+    case msg: UserAction => handleMessage(msg)
+    case SendUpdate(res) => out ! res
     case _ => println("Unhandled message")
   }
 
-  def handleMessage(msg: WebsocketMessage): Unit = msg match {
-    case UserAction("post", _) => manager ! GeneralManager.NewPost(self, msg)
-    case UserAction("comment", _) => manager ! GeneralManager.NewComment(self, msg)
-    case UserAction("like", _) => manager ! GeneralManager.NewState(self, msg)
+  def handleMessage(msg: UserAction): Unit = msg.action match {
+    case "new-post" => manager ! GeneralManager.NewPost(id, msg)
+    case "new-comment" => manager ! GeneralManager.NewComment(id, msg)
+    case "new-like" => manager ! GeneralManager.NewLike(id, msg)
     case _ => println(s"Unhandled websocket message $msg")
   }
 }
 
 object UserActor {
-  def props(out: ActorRef, manager: ActorRef) = Props(new UserActor(out, manager))
+  def props(id: UUID, out: ActorRef, manager: ActorRef) = Props(new UserActor(id, out, manager))
 
-  case class SendUpdate(res: WebsocketMessage)
+  case class SendUpdate(res: UserAction)
 }

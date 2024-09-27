@@ -1,6 +1,8 @@
 package controllers
 
 import javax.inject._
+import java.util.UUID
+
 import play.api._
 import play.api.mvc._
 import play.api.libs.json._
@@ -13,7 +15,7 @@ import org.apache.pekko.actor.{ ActorSystem, Props, ActorRef }
 import org.apache.pekko.stream.Materializer
 import org.apache.pekko.stream.scaladsl._
 
-import models.domain.{ LoginData, WebsocketMessage }
+import models.domain.{ LoginData, UserAction }
 import models.service.UserService
 import actors._
 import utils.{ CHErrorHandler, SecureAction }
@@ -29,10 +31,14 @@ class AuthController @Inject()(
   val executionContext: ExecutionContext
 ) extends BaseController with I18nSupport {
 
-  def index: WebSocket = WebSocket.accept[WebsocketMessage, WebsocketMessage] { implicit request =>
-    ActorFlow.actorRef { out => 
-      UserActor.props(out, manager)
-    }
+  def index: WebSocket = WebSocket.acceptOrResult[UserAction, UserAction] { implicit request =>
+    Future.successful(request.session.get("authenticated") match {
+			  case Some(user : String) => {
+				  Right(ActorFlow.actorRef(out => UserActor.props(UUID.fromString(user), out, manager)))
+			}
+			  case None => Left(Forbidden)
+			}
+		)
   }
   
   def create = Action.async(parse.json) { implicit request =>

@@ -12,11 +12,15 @@ import cats.syntax.all._
 
 import models.domain.Post
 import models.repo.PostRepo
+import models.service.WebsocketService
 import utils.CHError
 import utils.result.CHResult
 
 @Singleton
-class PostService @Inject()(postRepo: PostRepo)(implicit ec: ExecutionContext) {
+class PostService @Inject()(
+  postRepo: PostRepo,
+  websocketService: WebsocketService
+)(implicit ec: ExecutionContext) {
 
   def getPosts: Future[Seq[Post]] = postRepo.posts.get
 
@@ -24,7 +28,10 @@ class PostService @Inject()(postRepo: PostRepo)(implicit ec: ExecutionContext) {
     val query = postRepo.posts.post(post)
     query.map { _.fold(
       _ => Left(CHError(Status.BAD_REQUEST, "post.error.create")),
-      _ => Right("Post added successfully")
+      _ => {
+        websocketService.broadcastNewPost(post)
+        Right("Post added successfully")
+      }
     )}
   }
 
