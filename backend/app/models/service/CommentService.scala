@@ -12,18 +12,25 @@ import cats.syntax.all._
 
 import models.domain.Comment
 import models.repo.CommentRepo
+import models.service.WebsocketService
 import utils.result.CHResult
 import utils.CHError
 
 @Singleton
-class CommentService @Inject()(commentRepo: CommentRepo)(implicit ec: ExecutionContext) {
+class CommentService @Inject()(
+  commentRepo: CommentRepo,
+  websocketService: WebsocketService
+)(implicit ec: ExecutionContext) {
   
   def getComments: Future[Seq[Comment]] = commentRepo.comments.get
   def createComment(comment: Comment): CHResult[String] = EitherT {
     val query = commentRepo.comments.create(comment)
     query.map { _.fold(
       _ => Left(CHError(Status.BAD_REQUEST, "comment.error.create")),
-      _ => Right("Comment added successfully")
+      _ => {
+        websocketService.broadcastNewComment(comment)
+        Right("Comment added successfully")
+      }
     )}
   }
   def editComment(id: UUID, text: String): CHResult[String] = EitherT {
