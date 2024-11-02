@@ -1,0 +1,10 @@
+-- !Ups
+CREATE TABLE "PROFILES"(
+  "ID_USER" uuid REFERENCES "USERS" PRIMARY KEY,
+  "USERNAME" varchar(255),
+  "IMAGE" text,
+  "BIRTHDAY" timestamp
+);
+
+-- !Downs
+DROP TABLE IF EXISTS "PROFILES";

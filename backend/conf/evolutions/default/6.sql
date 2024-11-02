@@ -1,0 +1,8 @@
+-- !Ups
+ALTER TABLE "COMMENTS"
+ADD COLUMN "UPDATED_AT" timestamp;
+
+ALTER TABLE "LIKES"
+ADD COLUMN "UPDATED_AT" timestamp;
+
+-- !Downs
