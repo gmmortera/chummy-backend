@@ -64,6 +64,13 @@
     "watch": true,
     "watchEffect": true,
     "watchPostEffect": true,
-    "watchSyncEffect": true
+    "watchSyncEffect": true,
+    "axios": true,
+    "default": true,
+    "stores": true,
+    "useAppStore": true,
+    "useAuthStore": true,
+    "defineStore": true,
+    "useUserStore": true
   }
 }
