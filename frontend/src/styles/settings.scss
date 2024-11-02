@@ -1,17 +1,39 @@
-/**
- * src/styles/settings.scss
- *
- * Configures SASS variables and Vuetify overwrites
- */
+@use 'vuetify/settings' with (
+  $color-pack: false
+);
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
 
-// https://vuetifyjs.com/features/sass-variables/`
-// @use 'vuetify/settings' with (
-//   $color-pack: false
-// );
-
-$primary: #1E90FF;
-$secondary: #FFA500;
+// color palette
+$primary: #FF8C00;
+$secondary: #4682B4;
 $accent: #32CD32;
 $bg: #F5F5F5;
 $text: #333333;
-$hl: #FFFFE0;
+$hl: #FFF0E0;
+$border-light: #E0E0E0;
+$border-medium: #BDBDBD;
+
+
+// font
+$main-font: 'Nunito';
+
+$body-font-family: $main-font;
+$color-primary: $primary;
+$color-secondary: $secondary;
+$color-accent: $accent;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 16px;
+  font-family: $main-font, sans-serif;
+}
+
+body {
+  background: $bg;
+}
+
+html { 
+  overflow-y: auto !important 
+}

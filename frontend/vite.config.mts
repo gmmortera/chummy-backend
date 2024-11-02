@@ -13,6 +13,13 @@ import { fileURLToPath, URL } from 'node:url'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "@/styles/settings.scss" as *;`
+      }
+    }
+  },
   plugins: [
     VueRouter({
       dts: 'src/typed-router.d.ts',
@@ -23,6 +30,10 @@ export default defineConfig({
         'vue',
         {
           'vue-router/auto': ['useRoute', 'useRouter'],
+          'axios': [
+            ['default', 'axios']
+          ],
+          'pinia': ['defineStore']
         }
       ],
       dts: 'src/auto-imports.d.ts',
@@ -30,6 +41,9 @@ export default defineConfig({
         enabled: true,
       },
       vueTemplate: true,
+      dirs: [
+        './src/stores'
+      ]
     }),
     Components({
       dts: 'src/components.d.ts',
