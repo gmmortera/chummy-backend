@@ -25,8 +25,17 @@ class PostController @Inject()(
   }
 
   def create = SecureAction.async(parse.json) { implicit request =>
-    val json = request.body.validate[Post]
-    json.fold(
+    def transformJson(json: JsValue, idUser: UUID): JsValue = {
+      val transformer = JsPath.json.update((JsPath \ "idUser").json.put(JsString(idUser.toString)))
+      json.transform(transformer).getOrElse(json)
+    }
+
+    val json = request.session.get("authenticated").map(id => {
+        transformJson(request.body, UUID.fromString(id))
+      }
+    ).getOrElse(request.body)
+
+    json.validate[Post].fold(
       error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
       post => {
         postService.createPost(post).fold(CHErrorHandler(_), success => Created(Json.obj("post" -> Json.toJson(post))))

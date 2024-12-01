@@ -9,7 +9,9 @@
         />
         <h1>CHUMMY</h1>
       </div>
-      <v-form>
+      <v-form
+        @submit.prevent="login"
+      >
         <v-container>
           <v-text-field
             v-model="loginForm.email" 
@@ -26,7 +28,7 @@
             required
           ></v-text-field>
           <v-btn
-            @click="login"
+            type="submit"
           >
             Log in
           </v-btn>
@@ -65,7 +67,7 @@
       const status = await post(loginForm)
       
       if (status === 200) {
-        push('/')
+        push('/home')
       }
     } catch (error) {
       const e = error as Error

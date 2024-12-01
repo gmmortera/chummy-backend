@@ -1,4 +1,4 @@
-import { NewUser } from '@/types/storeTypes'
+import { NewUser } from '@/types/user'
 import { AxiosError } from 'axios'
 
 const resource = "/sessions"
