@@ -71,6 +71,7 @@
     "useAppStore": true,
     "useAuthStore": true,
     "defineStore": true,
-    "useUserStore": true
+    "useUserStore": true,
+    "usePostStore": true
   }
 }
