@@ -4,7 +4,8 @@ CREATE TABLE "POSTS"(
   "ID_USER" uuid REFERENCES "USERS",
   "IMAGE" text,
   "CONTENT" text NOT NULL,
-  "CREATED_AT" timestamp NOT NULL
+  "CREATED_AT" timestamp NOT NULL,
+  "SIGNATURE" text
 );
 
 -- !Downs

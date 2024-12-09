@@ -28,10 +28,11 @@ class PostRepo @Inject()(
       def image = column[Option[String]]("IMAGE")
       def content = column[String]("CONTENT")
       def createdAt = column[Instant]("CREATED_AT")
+      def signature = column[Option[String]]("SIGNATURE")
 
       def userPost = foreignKey("USER_POST", idUser, userRepo.users.table)(_.id, onDelete=ForeignKeyAction.Cascade)
 
-      def * = (id, idUser, image, content, createdAt).mapTo[Post]
+      def * = (id, idUser, image, content, createdAt, signature).mapTo[Post]
     }
 
     object posts extends TableQuery(new PostTable(_)) {

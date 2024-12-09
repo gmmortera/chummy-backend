@@ -9,7 +9,10 @@ scalaVersion := "2.13.14"
 val PlaySlickVersion = "5.3.0"
 val PekkoVersion = "1.0.2"
 
-libraryDependencies += guice
+libraryDependencies ++= Seq(
+	guice,
+	ws
+)
 libraryDependencies ++= Seq(
 	"org.scalatestplus.play" %% "scalatestplus-play" % "7.0.1" % Test,
 	"com.typesafe.play" %% "play-slick" % PlaySlickVersion,

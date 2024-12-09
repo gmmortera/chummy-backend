@@ -27,7 +27,10 @@ class PostService @Inject()(
   def createPost(post: Post): CHResult[String] = EitherT {
     val query = postRepo.posts.post(post)
     query.map { _.fold(
-      _ => Left(CHError(Status.BAD_REQUEST, "post.error.create")),
+      error => {
+        println(error)
+        Left(CHError(Status.BAD_REQUEST, "post.error.create"))
+      },
       _ => {
         websocketService.broadcastNewPost(post)
         Right("Post added successfully")

@@ -15,7 +15,7 @@ POST    /users                      controllers.UserController.create
 
 GET     /posts                      controllers.PostController.index
 POST    /posts                      controllers.PostController.create
-DELETE  /posts/:id                  controllers.PostController.destroy(id: java.util.UUID)
+PUT     /posts/:id                  controllers.PostController.destroy(id: java.util.UUID)
 
 GET     /profiles                   controllers.ProfileController.index
 POST    /profiles                   controllers.ProfileController.create
