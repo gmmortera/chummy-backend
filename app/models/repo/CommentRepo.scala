@@ -38,7 +38,10 @@ class CommentRepo @Inject()(
 
   object comments extends TableQuery(new CommentTable(_)) {
     def table: TableQuery[CommentTable] = this
-    def get: Future[Seq[Comment]] = db.run(this.result)
+    def get: Future[Seq[Comment]] = {
+      val action = this.sortBy(_.createdAt.desc).result
+      db.run(action)
+    }
     def create(comment: Comment): Future[Try[Int]] = {
       val action = (this += comment).asTry
       db.run(action)
