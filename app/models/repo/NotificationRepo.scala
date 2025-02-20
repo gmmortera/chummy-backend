@@ -38,8 +38,6 @@ class NotificationRepo @Inject()(
     def createdAt = column[Instant]("CREATED_AT")
     def seenAt = column[Option[Instant]]("SEEN_AT")
 
-    def notifUser = foreignKey("NOTIF_USER", idUser, userRepo.users.table)(_.id, 
-      onDelete=ForeignKeyAction.Cascade)
     def notifPost = foreignKey("NOTIF_POST", idPost, postRepo.posts.table)(_.id, 
       onDelete=ForeignKeyAction.Cascade)
 

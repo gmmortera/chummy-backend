@@ -30,7 +30,6 @@ class CommentRepo @Inject()(
     def createdAt = column[Instant]("CREATED_AT")
     def updatedAt = column[Option[Instant]]("UPDATED_AT")
 
-    def commentUser = foreignKey("COMMENT_USER", idUser, userRepo.users.table)(_.id, onDelete=ForeignKeyAction.Cascade)
     def commentPost = foreignKey("COMMENT_POST", idPost, postRepo.posts.table)(_.id, onDelete=ForeignKeyAction.Cascade)
 
     def * = (id, idUser, idPost, text, createdAt, updatedAt).mapTo[Comment]

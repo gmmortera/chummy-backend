@@ -25,15 +25,15 @@ class ReplyRepo @Inject()(
   class ReplyTable(tag: Tag) extends Table[Reply](tag, "REPLIES") {
     def id = column[UUID]("ID", O.PrimaryKey)
     def idUser = column[UUID]("ID_USER")
+    def idSender = column[UUID]("ID_SENDER")
     def idComment = column[UUID]("ID_COMMENT")
     def text = column[String]("TEXT")
     def createdAt = column[Instant]("CREATED_AT")
     def updatedAt = column[Option[Instant]]("UPDATED_AT")
 
     def replyUser = foreignKey("REPLY_USER", idUser, userRepo.users.table)(_.id, onDelete=ForeignKeyAction.Cascade)
-    def replyComment = foreignKey("REPLY_POST", idComment, commentRepo.comments.table)(_.id, onDelete=ForeignKeyAction.Cascade)
 
-    def * = (id, idUser, idComment, text, createdAt, updatedAt).mapTo[Reply]
+    def * = (id, idUser, idSender, idComment, text, createdAt, updatedAt).mapTo[Reply]
   }
 
   object replies extends TableQuery(new ReplyTable(_)) {

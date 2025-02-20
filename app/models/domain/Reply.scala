@@ -10,6 +10,7 @@ import play.api.libs.functional.syntax._
 case class Reply(
   id: UUID,
   idUser: UUID,
+  idSender: UUID,
   idComment: UUID,
   text: String,
   createdAt: Instant,
@@ -20,6 +21,7 @@ object Reply {
   implicit val replyReads: Reads[Reply] = (
     Reads.pure(UUID.randomUUID) and
     (JsPath \ "idUser").read[UUID] and
+    (JsPath \ "idSender").read[UUID] and
     (JsPath \ "idComment").read[UUID] and
     (JsPath \ "text").read[String] and
     Reads.pure(Instant.now) and

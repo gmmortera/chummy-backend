@@ -53,7 +53,7 @@ class AuthController @Inject()(
     )
   }
 
-  def destroy = SecureAction.async(parse.json) { implicit request =>
+  def destroy = SecureAction.async { implicit request =>
     Future.successful(Ok.withNewSession)
   }
 }

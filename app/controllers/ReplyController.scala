@@ -28,13 +28,13 @@ class ReplyController @Inject()(
     json.fold(
       error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
       reply => {
-        replyService.createReply(reply).fold(CHErrorHandler(_), success => Ok(Json.obj("success" -> s"$success")))
+        replyService.createReply(reply).fold(CHErrorHandler(_), success => Created(Json.obj("reply" -> Json.toJson(reply))))
       }
     )
   }
 
   def edit(id: UUID) = SecureAction.async(parse.json) { request =>
-    val text = request.body.as[String]
+    val text = (request.body \ "reply").as[String]
     replyService.editReply(id, text).fold(CHErrorHandler(_), success => Ok(Json.obj("success" -> s"$success")))
   }
 
