@@ -1,7 +1,7 @@
 -- !Ups
 CREATE TABLE "NOTIFICATIONS"(
   "ID" uuid PRIMARY KEY,
-  "ID_USER" uuid REFERENCES "USERS",
+  "ID_USER" uuid,
   "ID_POST" uuid REFERENCES "POSTS",
   "ACTION" varchar(10) NOT NULL,
   "CREATED_AT" timestamp NOT NULL,
