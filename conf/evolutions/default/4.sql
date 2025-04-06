@@ -1,8 +1,8 @@
 -- !Ups
 CREATE TABLE "COMMENTS"(
   "ID" uuid PRIMARY KEY,
-  "ID_USER" uuid,
-  "ID_POST" uuid REFERENCES "POSTS",
+  "ID_USER" uuid REFERENCES "USERS",
+  "ID_POST" uuid,
   "TEXT" text NOT NULL,
   "CREATED_AT" timestamp NOT NULL
 );
