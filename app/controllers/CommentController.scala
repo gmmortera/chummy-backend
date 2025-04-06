@@ -28,7 +28,7 @@ class CommentController @Inject()(
     json.fold(
       error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
       comment => {
-        commentService.createComment(comment).fold(CHErrorHandler(_), success => Created(Json.obj("comment" -> Json.toJson(comment))))
+        commentService.createComment(comment).fold(CHErrorHandler(_), success => Created(Json.toJson(comment)))
       }
     )
   }

@@ -28,7 +28,7 @@ class ReplyController @Inject()(
     json.fold(
       error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
       reply => {
-        replyService.createReply(reply).fold(CHErrorHandler(_), success => Created(Json.obj("reply" -> Json.toJson(reply))))
+        replyService.createReply(reply).fold(CHErrorHandler(_), success => Created(Json.toJson(reply)))
       }
     )
   }

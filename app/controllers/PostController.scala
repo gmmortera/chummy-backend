@@ -47,7 +47,7 @@ class PostController @Inject()(
             error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
             post => {
               val withImage = post.addImage(asset._1, asset._2)
-              postService.createPost(withImage).fold(CHErrorHandler(_), success => Created(Json.obj("post" -> Json.toJson(withImage))))
+              postService.createPost(withImage).fold(CHErrorHandler(_), success => Created(Json.toJson(withImage)))
             }
           )
         )
@@ -55,7 +55,7 @@ class PostController @Inject()(
         json.validate[Post].fold(
           error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
           post => {
-            postService.createPost(post).fold(CHErrorHandler(_), success => Created(Json.obj("post" -> Json.toJson(post))))
+            postService.createPost(post).fold(CHErrorHandler(_), success => Created(Json.toJson(post)))
           }
         )
     }

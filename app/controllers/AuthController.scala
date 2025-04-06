@@ -48,7 +48,7 @@ class AuthController @Inject()(
       data => {
         userService.validateUser(data).fold(
           CHErrorHandler(_), 
-          success => Ok(Json.obj("user" -> Json.toJson(success))).withSession("authenticated" -> success.id.toString))
+          success => Ok(Json.obj("user" -> Json.toJson(success.id))).withSession("authenticated" -> success.id.toString))
       }
     )
   }

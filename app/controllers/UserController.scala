@@ -29,7 +29,7 @@ class UserController @Inject()(
         error => Future.successful(BadRequest(Json.obj("error" -> JsError.toJson(error)))),
         user => {
           userService.createUser(user)
-            .fold(CHErrorHandler(_), success => Created(Json.obj("messsage" -> s"$success")))
+            .fold(CHErrorHandler(_), success => Created(Json.toJson(user)))
         }
       )
     }

@@ -27,7 +27,7 @@ class LikeController @Inject()(
     json.fold(
       error => Future.successful(BadRequest(Json.obj("errors" -> JsError.toJson(error)))),
       like => {
-        likeService.createLike(like).fold(CHErrorHandler(_), success => Created(Json.obj("like" -> Json.toJson(like))))
+        likeService.createLike(like).fold(CHErrorHandler(_), success => Created(Json.toJson(like)))
       }
     )
   }
