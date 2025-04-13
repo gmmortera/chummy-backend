@@ -11,7 +11,7 @@ import scala.util.Try
 
 import slick.jdbc.JdbcProfile
 
-import models.domain.Post
+import models.domain.{ Post, CursorRequest, CursorResponse }
 import models.repo.UserRepo
 
 @Singleton
@@ -38,6 +38,18 @@ class PostRepo @Inject()(
     object posts extends TableQuery(new PostTable(_)) {
       def table: TableQuery[PostTable] = this
       def get: Future[Seq[Post]] = db.run(this.result)
+      def get(cursorRequest: CursorRequest): Future[Seq[Post]] = {
+        val filteredQuery = cursorRequest.cursor match {
+          case Some(date) => this.filter(_.createdAt < date)
+          case None =>  this
+        }
+
+        val action = filteredQuery
+          .sortBy(_.createdAt.desc)
+          .take(cursorRequest.limit + 1)
+
+        db.run(action.result)
+      }
       def post(post: Post): Future[Try[Int]] = {
         val action = (this += post).asTry
         db.run(action)

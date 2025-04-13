@@ -20,7 +20,7 @@ class CommentController @Inject()(
 )(implicit ec: ExecutionContext) extends BaseController {
 
   def index = SecureAction.async {
-    commentService.getComments.map(comments => Ok(Json.obj("comments" -> Json.toJson(comments))))
+    commentService.getComments.map(comments => Ok(Json.toJson(comments)))
   }
 
   def create = SecureAction.async(parse.json) { request =>

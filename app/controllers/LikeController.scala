@@ -19,7 +19,7 @@ class LikeController @Inject()(
 )(implicit ec: ExecutionContext) extends BaseController {
   
   def index = SecureAction.async {
-    likeService.getLikes.map(likes => Ok(Json.obj("likes" -> Json.toJson(likes))))
+    likeService.getLikes.map(likes => Ok(Json.toJson(likes)))
   }
 
   def create = SecureAction.async(parse.json) { implicit request =>

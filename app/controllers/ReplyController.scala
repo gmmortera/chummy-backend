@@ -20,7 +20,7 @@ class ReplyController @Inject()(
 )(implicit ec: ExecutionContext) extends BaseController {
 
   def index = SecureAction.async {
-    replyService.getReplies.map(replies => Ok(Json.obj("replies" -> Json.toJson(replies))))
+    replyService.getReplies.map(replies => Ok(Json.toJson(replies)))
   }
 
   def create = SecureAction.async(parse.json) { request =>

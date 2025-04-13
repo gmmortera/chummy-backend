@@ -41,9 +41,28 @@ object Post {
 
 case class Asset(
   url: Option[String],
-  signatire: Option[String]
+  signature: Option[String]
 )
 
 object Asset {
   implicit val assetFormat: Format[Asset] = Json.format[Asset]
+}
+
+case class CursorRequest(
+  cursor: Option[Instant],
+  limit: Int
+)
+
+object CursorRequest {
+  implicit val cursorRequestReads: Reads[CursorRequest] = Json.reads[CursorRequest]
+}
+
+case class CursorResponse(
+  posts: Seq[Post] ,
+  nextCursor: Option[Instant],
+  hasMore: Boolean
+)
+
+object CursorResponse {
+  implicit val cursorResponseWrites: Writes[CursorResponse] = Json.writes[CursorResponse]
 }

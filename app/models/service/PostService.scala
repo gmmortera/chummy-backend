@@ -10,7 +10,7 @@ import scala.concurrent.{ Future, ExecutionContext }
 import cats.data.EitherT
 import cats.syntax.all._
 
-import models.domain.Post
+import models.domain.{ Post, CursorRequest, CursorResponse }
 import models.repo.PostRepo
 import models.service.WebsocketService
 import utils.CHError
@@ -23,6 +23,8 @@ class PostService @Inject()(
 )(implicit ec: ExecutionContext) {
 
   def getPosts: Future[Seq[Post]] = postRepo.posts.get
+  
+  def getPosts(cursorRequest: CursorRequest):Future[Seq[Post]] = postRepo.posts.get(cursorRequest)
 
   def createPost(post: Post): CHResult[String] = EitherT {
     val query = postRepo.posts.post(post)
