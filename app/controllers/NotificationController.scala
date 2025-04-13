@@ -20,7 +20,7 @@ class NotificationController @Inject()(
 )(implicit ec: ExecutionContext) extends BaseController {
 
   def index = SecureAction.async {
-    notifService.getNotifications.map(notifications => Ok(Json.obj("notifications" -> Json.toJson(notifications))))
+    notifService.getNotifications.map(notifications => Ok(Json.toJson(notifications)))
   }
 
   def create = SecureAction.async(parse.json) { request =>

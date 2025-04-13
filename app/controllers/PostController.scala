@@ -13,7 +13,7 @@ import scala.concurrent.{ Future, ExecutionContext }
 
 import org.apache.pekko.stream.scaladsl._
 
-import models.domain.{ Post, Asset }
+import models.domain.{ Post, Asset, CursorRequest, CursorResponse }
 import models.service.{ PostService, CloudinaryService }
 import utils._
 
@@ -25,8 +25,23 @@ class PostController @Inject()(
   SecureAction: SecureAction
 )(implicit ec: ExecutionContext) extends  BaseController {
 
-  def index = SecureAction.async {
-    postService.getPosts.map(posts => Ok(Json.obj("posts" -> Json.toJson(posts))))
+  def index = SecureAction.async(parse.json) { implicit request =>
+    val json = request.body.validate[CursorRequest]
+
+    json.fold(
+      error => Future.successful(BadRequest(Json.obj("errors" -> JsError.toJson(error)))),
+      cursorRequest => postService.getPosts(cursorRequest)
+        .map{ posts => 
+          val hasMore = posts.length > cursorRequest.limit
+          val nextCursor = if (hasMore && posts.nonEmpty)
+            Some(posts.last.createdAt)
+          else
+            None
+          val response = CursorResponse(posts, nextCursor, hasMore)
+
+          Ok(Json.toJson(response))
+        } 
+    )
   }
 
   def create = SecureAction.async(parse.multipartFormData) { implicit request =>
@@ -71,7 +86,18 @@ class PostController @Inject()(
           error => Future.successful(CHErrorHandler(error)),
           success => postService.deletePost(id).fold(CHErrorHandler(_), success => Ok(Json.obj("success" -> s"$success")))
         )
-        case Asset(None, None) => postService.deletePost(id).fold(CHErrorHandler(_), success => Ok(Json.obj("success" -> s"$success")))
+        case Asset(Some(_), None) => postService.deletePost(id).fold(
+          CHErrorHandler(_), 
+          success => Ok(Json.obj("success" -> s"$success"))
+        )
+        case Asset(None, Some(_)) => postService.deletePost(id).fold(
+          CHErrorHandler(_), 
+          success => Ok(Json.obj("success" -> s"$success"))
+        )
+        case Asset(None, None) => postService.deletePost(id).fold(
+          CHErrorHandler(_), 
+          success => Ok(Json.obj("success" -> s"$success"))
+        )
       }
     )
   }

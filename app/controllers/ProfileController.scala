@@ -21,7 +21,7 @@ class ProfileController @Inject()(
 )(implicit ec: ExecutionContext) extends BaseController {
 
   def index = SecureAction.async {
-    profileService.getProfiles.map(profiles => Ok(Json.obj("profiles" -> Json.toJson(profiles))))  
+    profileService.getProfiles.map(profiles => Ok(Json.toJson(profiles)))  
   }
 
   def create = SecureAction.async(parse.json) { request =>

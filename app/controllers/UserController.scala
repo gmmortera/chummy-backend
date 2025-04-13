@@ -20,7 +20,7 @@ class UserController @Inject()(
   val controllerComponents: ControllerComponents)
   (implicit ec: ExecutionContext) extends BaseController with I18nSupport {
     def index = SecureAction.async {
-      userService.getUsers.map(users => Ok(Json.obj("users" -> Json.toJson(users))))
+      userService.getUsers.map(users => Ok(Json.toJson(users)))
     }
 
     def create = Action.async(parse.json) { implicit request =>
